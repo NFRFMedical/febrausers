@@ -1,5 +1,5 @@
 <div class="well card-footer">
-  <p>Febra Diagnostica <span class="float-right">Developed By Kiiryarnold@gmail.com</span>
+  <p>Febra Diagnostica <span class="float-right">University of Uyo, Teaching Hospital Nigeria <br> Mount Royal University, Calgary Canada</span>
   </p>
 </div>
 
