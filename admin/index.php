@@ -48,7 +48,7 @@ if (isset($activeId)) {
           <h3><i class="fas fa-users mr-2"></i>User list <span class="float-right">Welcome! <strong>
             <span class="badge badge-lg badge-secondary text-white">
 <?php
-$username = Session::get('username');
+$username = Session::get('name');
 if (isset($username)) {
   echo $username;
 }
@@ -110,9 +110,9 @@ if (isset($username)) {
                         <td><span class="badge badge-lg badge-secondary text-white"><?php echo $value->mobile; ?></span></td>
                         <td>
                           <?php if ($value->isActive == '0') { ?>
-                          <span class="badge badge-lg badge-info text-white">Active</span>
+                          <span class="badge badge-lg badge-info text-white">Approved</span>
                         <?php }else{ ?>
-                    <span class="badge badge-lg badge-danger text-white">Deactive</span>
+                    <span class="badge badge-lg badge-danger text-white">Not Actve</span>
                         <?php } ?>
 
                         </td>
@@ -134,13 +134,13 @@ if (isset($username)) {
                        <?php if (Session::get("id") == $value->id) {
                          echo "disabled";
                        } ?>
-                                btn-sm " href="?deactive=<?php echo $value->id;?>">Disable</a>
+                                btn-sm " href="?deactive=<?php echo $value->id;?>">Deactivate</a>
                              <?php } elseif($value->isActive == '1'){?>
-                               <a onclick="return confirm('Are you sure To Active ?')" class="btn btn-secondary
+                               <a onclick="return confirm('Are you sure To Approve ?')" class="btn btn-secondary
                        <?php if (Session::get("id") == $value->id) {
                          echo "disabled";
                        } ?>
-                                btn-sm " href="?active=<?php echo $value->id;?>">Active</a>
+                                btn-sm " href="?active=<?php echo $value->id;?>">Approve</a>
                              <?php } ?>
 
 

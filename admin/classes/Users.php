@@ -54,12 +54,18 @@ class Users{
 
   // User Registration Method
   public function userRegistration($data){
-    $name = $data['name'];
+    $fname = $data['fname'];
+    $mname = $data['mname'];
+    $lname = $data['lname'];
+    $name = $fname.''.$mname.''.$lname;
     $username = $data['username'];
     $email = $data['email'];
+    $nin = $data['nin'];
     $mobile = $data['mobile'];
+    $isActive = "1";
     $roleid = $data['roleid'];
     $password = $data['password'];
+    $cpassword = $data['cpassword'];
 
     $cone=mysqli_connect("localhost","root","nJHttms84WLa","febra");
     $sqll="select count('userid') from tbl_users";
@@ -75,6 +81,7 @@ class Users{
     $checkEmail = $this->checkExistEmail($email);
     $checkExistUserId = $this->checkExistUserId($assignedID);
 
+
     if ($name == "" || $username == "" || $email == "" || $mobile == "" || $password == "") {
       $msg = '<div class="alert alert-danger alert-dismissible mt-3" id="flash-msg">
 <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
@@ -85,7 +92,14 @@ class Users{
 <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
 <strong>Error !</strong> Username is too short, at least 3 Characters !</div>';
         return $msg;
-    }elseif (filter_var($mobile,FILTER_SANITIZE_NUMBER_INT) == FALSE) {
+    }
+    elseif ($password != $cpassword) {
+      $msg = '<div class="alert alert-danger alert-dismissible mt-3" id="flash-msg">
+<a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
+<strong>Error !</strong> Passwords Do not  Match !</div>';
+        return $msg;
+    }
+    elseif (filter_var($mobile,FILTER_SANITIZE_NUMBER_INT) == FALSE) {
       $msg = '<div class="alert alert-danger alert-dismissible mt-3" id="flash-msg">
 <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
 <strong>Error !</strong> Enter only Number Characters for Mobile number field !</div>';
@@ -124,7 +138,7 @@ class Users{
     }
     else{
 
-      $sql = "INSERT INTO tbl_users(name, username, email, password, mobile, roleid, userid) VALUES(:name, :username, :email, :password, :mobile, :roleid, :userid)";
+      $sql = "INSERT INTO tbl_users(name, username, email, password, mobile, roleid, userid, nin, isActive) VALUES(:name, :username, :email, :password, :mobile, :roleid, :userid, :nin, :isActive)";
       $stmt = $this->db->pdo->prepare($sql);
       $stmt->bindValue(':name', $name);
       $stmt->bindValue(':username', $username);
@@ -133,11 +147,13 @@ class Users{
       $stmt->bindValue(':mobile', $mobile);
       $stmt->bindValue(':roleid', $roleid);
       $stmt->bindValue(':userid', $assignedID);
+      $stmt->bindValue(':nin', $nin);
+      $stmt->bindValue(':isActive', $isActive);
       $result = $stmt->execute();
       if ($result) {
         $msg = '<div class="alert alert-success alert-dismissible mt-3" id="flash-msg">
   <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
-  <strong>Success !</strong> Wow, you have Registered Successfully !</div>';
+  <strong>Success !</strong> You have Registered Successfully, You will receive an email in a few minutes !</div>';
           return $msg;
       }else{
         $msg = '<div class="alert alert-danger alert-dismissible mt-3" id="flash-msg">
@@ -264,7 +280,7 @@ class Users{
   // User login Autho Method
   public function userLoginAutho($email, $password){
     $password = SHA1($password);
-    $sql = "SELECT * FROM tbl_users WHERE email = :email and password = :password LIMIT 1";
+    $sql = "SELECT * FROM tbl_users WHERE email = :email and password = :password and roleid = 1 LIMIT 1";
     $stmt = $this->db->pdo->prepare($sql);
     $stmt->bindValue(':email', $email);
     $stmt->bindValue(':password', $password);
@@ -336,7 +352,7 @@ class Users{
         }else{
           $msg = '<div class="alert alert-danger alert-dismissible mt-3" id="flash-msg">
     <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
-    <strong>Error !</strong> Email or Password did not Matched !</div>';
+    <strong>Error !</strong> Email or Password did not Matched ! Or Access Denied For Non Admin</div>';
             return $msg;
         }
 
@@ -523,8 +539,10 @@ class Users{
       $stmt->bindValue(':password', $old_pass);
       $stmt->bindValue(':id', $userid);
       $stmt->execute();
+      $message = "Hi,".$name."Your Account has been verified with Assigned User ID:".$assignedID;
       if ($stmt->rowCount() > 0) {
         return true;
+        mail($email, 'Febra Diagnostica Verification',$message);
       }else{
         return false;
       }

@@ -59,7 +59,10 @@ if (isset($_GET['action']) && $_GET['action'] == 'logout') {
 
         <div class="collapse navbar-collapse" id="navbarsExampleDefault">
           <ul class="navbar-nav ml-auto">
+          <li class="nav-item">
 
+          <a class="nav-link" href="http://febradiagnostica.org/"><i class="fas fa-users mr-2"></i>Home</span></a>
+          </li>
 
 
           <?php if (Session::get('id') == TRUE) { ?>
@@ -68,20 +71,7 @@ if (isset($_GET['action']) && $_GET['action'] == 'logout') {
 
                   <a class="nav-link" href="index.php"><i class="fas fa-users mr-2"></i>User lists </span></a>
               </li>
-              <li class="nav-item
-
-              <?php
-
-                          $path = $_SERVER['SCRIPT_FILENAME'];
-                          $current = basename($path, '.php');
-                          if ($current == 'addUser') {
-                            echo " active ";
-                          }
-
-                         ?>">
-
-                <a class="nav-link" href="addUser.php"><i class="fas fa-user-plus mr-2"></i>Add user </span></a>
-              </li>
+            
             <?php  } ?>
             <li class="nav-item
             <?php
@@ -115,7 +105,7 @@ if (isset($_GET['action']) && $_GET['action'] == 'logout') {
                           }
 
                          ?>">
-                <a class="nav-link" href="register.php"><i class="fas fa-user-plus mr-2"></i>Register</a>
+                <a class="nav-link" href="register.php"><i class="fas fa-user-plus mr-2"></i>Get User ID</a>
               </li>
               <li class="nav-item
                 <?php
@@ -127,7 +117,7 @@ if (isset($_GET['action']) && $_GET['action'] == 'logout') {
                     				}
 
                     			 ?>">
-                <a class="nav-link" href="login.php"><i class="fas fa-sign-in-alt mr-2"></i>Login</a>
+                <a class="nav-link" href="login.php"><i class="fas fa-sign-in-alt mr-2"></i>Admin</a>
               </li>
 
           <?php } ?>
